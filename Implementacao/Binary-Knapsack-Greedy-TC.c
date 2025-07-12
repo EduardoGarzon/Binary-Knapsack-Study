@@ -8,6 +8,9 @@
 #define CLEAR_SCREEN system("clear")
 #endif
 
+clock_t start, end;
+double cpu_time_used;
+
 //-----------------------------------------------------------------------------------
 // Funcao responsável por simular a Mochila Binária utilizando Greedy ou TC.
 //-----------------------------------------------------------------------------------
@@ -64,6 +67,8 @@ int main(int argc, char *argv[])
 
     int final_weight = knapSackGTC(max_knapsack_weight, items, total_items, modo);
     printf("\nPESO FINAL DA MOCHILA: %d\n", final_weight);
+
+    printf("\nTEMPO DE EXECUCAO: %.6f segundos\n", cpu_time_used);
 
     free(items);
 
@@ -145,6 +150,8 @@ int knapSackGTC(int max_knapsack_weight, Item items[], int total_items, int modo
 
     if (modo == 1) // GREEDY
     {
+        start = clock();
+
         // Enquanto o peso atual for menor que o peso máximo da mochila e algum item for selecionado...
         while ((current_weight < max_knapsack_weight) && selected_item_index != -1)
         {
@@ -193,24 +200,68 @@ int knapSackGTC(int max_knapsack_weight, Item items[], int total_items, int modo
                        items[selected_item_index].is_discarded);
             }
         }
+
+        end = clock();
     }
     else if (modo == 2) // TC
     {
         quick_sort(items, 0, total_items - 1);
 
-        printf("\nITENS ORDENADOS PELO QUICKSORT:\n");
+        printf("ITENS ORDENADOS PELO QUICKSORT:\n");
         for (int i = 0; i < total_items; i++)
         {
             printf("ITEM %d: VALOR = %d | PESO = %d | CUSTO/BENEFICIO = %.2f | SELECAO: %d | DESCARTE: %d\n",
                    i + 1, items[i].value, items[i].weight, items[i].cost_benefit, items[i].is_selected, items[i].is_discarded);
         }
         printf("\n");
+
+        start = clock();
+
+        // Percorre todos os itens...
+        for (i = 0; i < total_items; i++)
+        {
+            // Se o custo-beneficio do item + o peso atual da mochila for menor ou igual a capacidade máxima da mochila...
+            if ((items[i].weight + current_weight <= max_knapsack_weight))
+            {
+                current_weight += items[i].weight; // Atualiza o peso atual da mochila.
+                items[i].is_selected = 1;          // Marca o item como selecionado.
+
+                printf("ITEM SELECIONADO [%d]: VALOR = %d | PESO = %d | CUSTO/BENEFICIO = %.2f | SELECAO: %d | DESCARTE: %d\n",
+                       i + 1,
+                       items[i].value,
+                       items[i].weight,
+                       items[i].cost_benefit,
+                       items[i].is_selected,
+                       items[i].is_discarded);
+            }
+            else
+            {
+                items[i].is_discarded = 1; // Senão marca o item como descartado.
+
+                printf("ITEM DESCARTADO OU NAO-SELECIONADO [%d]: VALOR = %d | PESO = %d | CUSTO/BENEFICIO = %.2f | SELECAO: %d | DESCARTE: %d\n",
+                       i + 1,
+                       items[i].value,
+                       items[i].weight,
+                       items[i].cost_benefit,
+                       items[i].is_selected,
+                       items[i].is_discarded);
+            }
+
+            if (current_weight == max_knapsack_weight)
+            {
+                break;
+            }
+        }
+
+        end = clock();
     }
     else
     {
         printf("MODO INVÁLIDO PARA EXECUTAR A MOCHILA BINÁRIA!\n");
         return -1;
     }
+
+    cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
 
     return current_weight;
 }
