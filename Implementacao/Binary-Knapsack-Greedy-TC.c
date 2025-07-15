@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <windows.h>
 
 #ifdef _WIN32
@@ -41,6 +42,8 @@ Item *load_entrie(const char *input_file, int *max_knapsack_weight, int total_it
 int main(int argc, char *argv[])
 {
     // CLEAR_SCREEN;
+
+    srand(time(NULL));
 
     if (argc < 4)
     {
