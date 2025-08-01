@@ -181,26 +181,10 @@ int knapSackGTC(int max_knapsack_weight, Item items[], int total_items, int modo
             {
                 current_weight += items[selected_item_index].weight; // Atualiza peso atual.  4n operações
                 items[selected_item_index].is_selected = 1;          // Marca item como selecionado. 3n operações
-
-                // printf("ITEM SELECIONADO [%d]: VALOR = %d | PESO = %d | CUSTO/BENEFICIO = %.2f | SELECAO: %d | DESCARTE: %d\n",
-                //        selected_item_index + 1,
-                //        items[selected_item_index].value,
-                //        items[selected_item_index].weight,
-                //        items[selected_item_index].cost_benefit,
-                //        items[selected_item_index].is_selected,
-                //        items[selected_item_index].is_discarded);
             }
             else
             {
                 items[selected_item_index].is_discarded = 1; // Senão marca o item como descartado. 3n operações
-
-                // printf("ITEM DESCARTADO OU NAO-SELECIONADO [%d]: VALOR = %d | PESO = %d | CUSTO/BENEFICIO = %.2f | SELECAO: %d | DESCARTE: %d\n",
-                //        selected_item_index + 1,
-                //        items[selected_item_index].value,
-                //        items[selected_item_index].weight,
-                //        items[selected_item_index].cost_benefit,
-                //        items[selected_item_index].is_selected,
-                //        items[selected_item_index].is_discarded);
             }
         }
 
@@ -209,14 +193,6 @@ int knapSackGTC(int max_knapsack_weight, Item items[], int total_items, int modo
     else if (modo == 2) // TC
     {
         quick_sort(items, 0, total_items - 1); // n log n
-
-        // printf("ITENS ORDENADOS PELO QUICKSORT:\n");
-        // for (int i = 0; i < total_items; i++)
-        // {
-        //     printf("ITEM %d: VALOR = %d | PESO = %d | CUSTO/BENEFICIO = %.2f | SELECAO: %d | DESCARTE: %d\n",
-        //            i + 1, items[i].value, items[i].weight, items[i].cost_benefit, items[i].is_selected, items[i].is_discarded);
-        // }
-        // printf("\n");
 
         QueryPerformanceFrequency(&frequency);
         QueryPerformanceCounter(&start);
@@ -229,26 +205,11 @@ int knapSackGTC(int max_knapsack_weight, Item items[], int total_items, int modo
             {
                 current_weight += items[i].weight; // Atualiza o peso atual da mochila. 4n operações
                 items[i].is_selected = 1;          // Marca o item como selecionado. 3n operações
-
-                // printf("ITEM SELECIONADO [%d]: VALOR = %d | PESO = %d | CUSTO/BENEFICIO = %.2f | SELECAO: %d | DESCARTE: %d\n",
-                //        i + 1,
-                //        items[i].value,
-                //        items[i].weight,
-                //        items[i].cost_benefit,
-                //        items[i].is_selected,
-                //        items[i].is_discarded);
             }
             else
             {
                 items[i].is_discarded = 1; // Senão marca o item como descartado. 3n comparações
 
-                // printf("ITEM DESCARTADO OU NAO-SELECIONADO [%d]: VALOR = %d | PESO = %d | CUSTO/BENEFICIO = %.2f | SELECAO: %d | DESCARTE: %d\n",
-                //        i + 1,
-                //        items[i].value,
-                //        items[i].weight,
-                //        items[i].cost_benefit,
-                //        items[i].is_selected,
-                //        items[i].is_discarded);
             }
 
             if (current_weight == max_knapsack_weight) // n
